@@ -11,7 +11,11 @@
                 </form>
 
                 <ul class="task-list" v-if="tasks.length">
-                    <li v-for="(task, i) in tasks" :key="i">{{ task }} <i></i></li>
+                    <li v-for="(task, i) in tasks"
+                        :key="i">
+                        {{ task }}
+                        <font-awesome-icon icon="times-circle" class="task-item-close" @click="removeItem(i)"/>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -27,9 +31,14 @@
         }),
         methods: {
             addItem() {
-                if ( this.task.trim() !== '' ) {
+                if (this.task.trim() !== '') {
                     this.tasks.push(this.task);
                     this.task = '';
+                }
+            },
+            removeItem(i) {
+                if (this.tasks[i]) { // simple check to make sure it exists 🤷‍
+                    this.tasks.splice(i, 1);
                 }
             }
         }
