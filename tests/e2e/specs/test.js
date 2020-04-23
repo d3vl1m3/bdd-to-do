@@ -1,9 +1,4 @@
 // https://docs.cypress.io/api/introduction/api.html
-
-function aliasTaskList() {
-  cy.get('.task-list').as('taskList');
-}
-
 function initTaskListWithItems() {
   // button should always be disabled to start
   cy.get('@taskSortTrigger').should('be.disabled');
@@ -19,8 +14,6 @@ function initTaskListWithItems() {
   // add the last item via button click instead
   cy.get('@newTaskSubmit').click();
 
-  aliasTaskList();
-
 }
 
 describe('Testing todo list', () => {
@@ -31,6 +24,7 @@ describe('Testing todo list', () => {
     cy.get('.task-sort-trigger').as('taskSortTrigger');
     // alias for list now available
     initTaskListWithItems();
+    cy.get('.task-list').as('taskList');
   });
 
   it('Can add a task to a list', () => {
