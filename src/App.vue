@@ -3,8 +3,16 @@
         <div class="container">
             <div class="row-cols-1">
                 Welcome to app
-                <button @click="hide = true"></button>
-                <p v-if="!hide">Now you see me</p>
+                <form @submit.prevent="addItem">
+                    <input type="text"
+                           class="new-task-input"
+                           v-model="task">
+                    <button class="new-task-submit" type="submit">Add</button>
+                </form>
+
+                <ul class="task-list" v-if="tasks.length">
+                    <li v-for="(task, i) in tasks" :key="i">{{ task }} <i></i></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -13,8 +21,18 @@
 <script>
     export default {
         data: () => ({
-           hide: false
-        })
+            hide: false,
+            task: '',
+            tasks: [],
+        }),
+        methods: {
+            addItem() {
+                if ( this.task.trim() !== '' ) {
+                    this.tasks.push(this.task);
+                    this.task = '';
+                }
+            }
+        }
     }
 </script>
 
