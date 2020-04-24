@@ -2,8 +2,10 @@
     <div id="app">
         <div class="container">
             <div class="row-cols-1">
-                <h1>What needs sorting?</h1>
+                <h1>What needs doing?</h1>
+
                 <form @submit.prevent="addItem">
+
                     <input type="text"
                            class="new-task-input"
                            v-model="task">
@@ -11,6 +13,7 @@
                             type="submit">
                         Add
                     </button>
+
                     <button class="task-sort-trigger"
                             type="button"
                             @click="beginSorting()"
@@ -22,64 +25,42 @@
                             Begin!
                         </template>
                     </button>
+
                 </form>
 
                 <template v-if="sorting && tasks.length">
                     <form class="task-sorter"
-                          @submit.prevent>
-                        <h2>How urgent/important is each task?</h2>
+                          @submit.prevent="orderTaskItems()">
+                        <h2 class="mt-4">How urgent/important is each task?</h2>
+
                         <div v-for="(task, i) in tasks"
                              :key="i"
-                             class="sorting-task-question-container">
+                             class="sorting-task__item-questions sorting-task-question-container my-4 p-3">
                             <h3>{{ task }}</h3>
-                            <div class="container">
-                                <div class="row row-cols-2">
-                                    <div>
-                                        <fieldset>
-                                            <legend>How important?</legend>
-                                            <div class="container">
-                                                <div class="row row-cols-5">
-                                                    <div v-for="n in 5"
-                                                         :key="n"
-                                                         class="form-check">
-                                                        <input type="radio"
-                                                               class="form-check-input"
-                                                               :id="`important_${i}_${n}`"
-                                                               :name="`important_${i}`">
-                                                        <label class="form-check-label d-block"
-                                                                :for="`important_${i}_${n}`">{{ n }}</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    <div>
-                                        <fieldset>
-                                            <legend>How urgent?</legend>
-                                            <div class="container">
-                                                <div class="row row-cols-5">
-                                                    <div v-for="n in 5"
-                                                        :key="n"
-                                                        class="form-check">
-                                                        <input type="radio"
-                                                               class="form-check-input"
-                                                               :id="`urgency_${i}_${n}`"
-                                                               :name="`urgency_${i}`">
-                                                        <label class="form-check-label d-block"
-                                                                :for="`urgency_${i}_${n}`">{{ n }}</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <ul class="container">
+                                <li class="row row-cols-2">
+                                    <sorter-radio-group v-bind="{
+                                        legend_text: 'How Important?',
+                                        group_id: i,
+                                        group_type: 'important'
+                                    }"/>
+                                    <sorter-radio-group v-bind="{
+                                        legend_text: 'How Urgent?',
+                                        group_id: i,
+                                        group_type: 'urgent'
+                                    }"/>
+                                </li>
+                            </ul>
+
                         </div>
+
                         <button type="submit" class="btn btn-primary my-2">Done!</button>
                     </form>
                 </template>
+
                 <template v-else-if="tasks.length && !sorting">
-                    <ul class="task-list" >
+                    <ul class="task-list">
                         <li v-for="(task, i) in tasks"
                             :key="i">
                             {{ task }}
@@ -90,22 +71,34 @@
                         </li>
                     </ul>
                 </template>
+
+                <ul class="sorted-list" v-if="!sorting && ordered_tasks">
+                    <li v-for="(task, i) in ordered_tasks"
+                        :key="i">{{ task }}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import sorterRadioGroup from "@/components/sorterRadioGroup/component";
+
     export default {
         data: () => ({
             hide: false,
             task: '',
             tasks: [],
+            ordered_tasks: [],
             sorting: false
         }),
+        components: {
+            sorterRadioGroup
+        },
         methods: {
             addItem() {
-                if ( this.sorting) {
+                if (this.sorting) {
                     this.sorting = false;
                 }
 
@@ -121,11 +114,15 @@
             },
             beginSorting() {
                 this.sorting = true;
+            },
+            orderTaskItems() {
+                // using the data from the sort fields
+                this.sorting = false;
             }
         }
     }
 </script>
 
 <style lang="scss">
-    @import "~bootstrap/dist/css/bootstrap.min.css";
+    @import "~bootstrap/scss/bootstrap";
 </style>
