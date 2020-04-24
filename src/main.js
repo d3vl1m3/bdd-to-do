@@ -5,10 +5,11 @@ import App from './App.vue'
 import State from '@/models/State'
 import Task from '@/models/Task'
 import Tag from '@/models/Tag'
+import TaskTag from '@/models/TaskTag'
 import DbSeeder from '@/DbSeeder'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ const database = new VuexORM.Database();
 database.register(State);
 database.register(Task);
 database.register(Tag);
+database.register(TaskTag);
 
 const store = new Vuex.Store({
     plugins: [VuexORM.install(database)]

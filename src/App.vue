@@ -5,7 +5,6 @@
                 <h1>What needs doing?</h1>
 
                 <form @submit.prevent="addItem" v-if="!sorting">
-
                     <input type="text"
                            class="new-task-input"
                            v-model="task">
@@ -16,8 +15,7 @@
 
                     <button class="task-sort-trigger"
                             type="button"
-                            @click="beginSorting()"
-                            :disabled="!activeTasks.length">
+                            @click.prevent="sorting = true">
                         <template v-if="sorting">
                             Redo!
                         </template>
@@ -25,12 +23,12 @@
                             Begin!
                         </template>
                     </button>
-
                 </form>
 
-                <template v-if="sorting && activeTasks.length">
+                <template v-if="sorting">
                     <form class="task-sorter"
-                          @submit.prevent="orderTaskItems()">
+                          ref="task-sorter"
+                          @submit.prevent="triggerOrderedSorting()">
                         <h2 class="mt-4">How urgent/important is each task?</h2>
 
                         <div v-for="(task, i) in activeTasks"
@@ -52,14 +50,15 @@
                                     }"/>
                                 </li>
                             </ul>
-
                         </div>
 
-                        <button type="submit" class="btn btn-primary my-2">Done!</button>
+                        <button type="submit"
+                                class="btn btn-primary my-2"
+                        >Done!</button>
                     </form>
                 </template>
 
-                <template v-else-if="activeTasks.length && !sorting">
+                <template v-else-if="!sorting">
                     <ul class="task-list">
                         <li v-for="(task, i) in activeTasks"
                             :key="i">
@@ -71,11 +70,13 @@
                         </li>
                     </ul>
                 </template>
+
                 <ul class="sorted-list" v-if="!sorting && ordered_tasks.length">
                     <li v-for="(task, i) in ordered_tasks"
                         :key="i">{{ task.title }}
                     </li>
                 </ul>
+
             </div>
         </div>
     </div>
@@ -127,12 +128,12 @@
                     state_id: StatesEnum.DELETED
                 });
             },
-            beginSorting() {
-                this.sorting = true;
-            },
-            orderTaskItems() {
-                // using the data from the sort fields
-                this.sorting = false;
+            triggerOrderedSorting() {
+                const formValues = new FormData(this.$refs['task-sorter']).entries();
+
+                for (const [key, value] of formValues) {
+                    console.log(key, value);
+                }
             }
         }
     }

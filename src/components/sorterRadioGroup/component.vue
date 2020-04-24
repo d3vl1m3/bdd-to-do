@@ -7,7 +7,8 @@
             <input type="radio"
                    class="form-check-input"
                    :id="`${group_type}_${group_id}_${n}`"
-                   :name="`${group_type}_${group_id}`">
+                   :name="`${group_type}_${group_id}`"
+                   :value="n">
             <label class="form-check-label d-block pr-3"
                    :for="`${group_type}_${group_id}_${n}`">{{ n }}</label>
         </span>
@@ -17,7 +18,7 @@
 <script>
     import Vue from "vue";
 
-    export default Vue.component('sortedRadioComponent', {
+    export default Vue.component('sorterRadioGroup', {
         props:  {
             legend_text: {
               type: String,
@@ -28,7 +29,7 @@
                 required: true // e.g. 'important' or 'urgent'
             },
             group_id: {
-                type: Number,
+                type: String,
                 required: true
             }
         }

@@ -7,8 +7,8 @@ import StatesEnum from "@/enums/StatesEnum";
 export default class DbSeeder {
     static init() {
         this.addPublishedStates();
+        this.addTags();
         this.addBoilerplateTasks();
-        this.addEisenhowerPrinciple();
     }
 
     // add the published states for items (active, deleted etc.)
@@ -31,23 +31,91 @@ export default class DbSeeder {
             data: [
                 {
                     title: 'This',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: StatesEnum.ACTIVE,
+                    tags: [
+                        {
+                            ...Tag.find(0),
+                            tag: {
+                                id: 1,
+                                order: 2
+                            }
+                        },
+                        {
+                            ...Tag.find(1),
+                            tag: {
+                                id: 1,
+                                order: 5
+                            }
+                        }
+                    ]
                 },
                 {
                     title: 'that',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: StatesEnum.ACTIVE,
+                    tags: [
+                        {
+                            ...Tag.find(0),
+                            tag: {
+                                id: 1,
+                                order: 3
+                            }
+                        },
+                        {
+                            ...Tag.find(1),
+                            tag: {
+                                id: 1,
+                                order: 3
+                            }
+                        }
+                    ]
                 },
                 {
                     title: 'the',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: StatesEnum.ACTIVE,
+                    tags: [
+                        {
+                            ...Tag.find(0),
+                            tag: {
+                                id: 1,
+                                order: 1
+                            }
+                        },
+                        {
+                            ...Tag.find(1),
+                            tag: {
+                                id: 1,
+                                order: 4
+                            }
+                        }
+                    ]
                 },
                 {
                     title: 'other.',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: StatesEnum.ACTIVE,
+                    tags: [
+                        {
+                            ...Tag.find(0),
+                            tag: {
+                                id: 1,
+                                order: 4
+                            }
+                        },
+                        {
+                            ...Tag.find(1),
+                            tag: {
+                                id: 1,
+                                order: 2
+                            }
+                        }
+                    ]
                 },
             ]
         });
 
+    }
+
+    static addTags() {
+        this.addEisenhowerPrinciple();
     }
 
     // add basic tasks to pre-populate the list
