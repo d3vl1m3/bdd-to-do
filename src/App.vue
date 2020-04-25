@@ -68,6 +68,12 @@
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
+
+                            <ul v-if="task.tags">
+                                <li v-for="(tag, i) in task.tags" :key="i">
+                                    {{ tag.title }} {{ tag.pivot.order }}
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </template>
