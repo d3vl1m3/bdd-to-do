@@ -16,7 +16,8 @@
 
                     <button class="task-sort-trigger"
                             type="button"
-                            @click.prevent="sorting = true">
+                            @click.prevent="sorting = true"
+                            :disabled="!activeTasks.length">
                         <template v-if="sorting">
                             Redo!
                         </template>
@@ -27,7 +28,7 @@
                 </form>
 
                 <template v-if="sorting">
-                    <form class="task-sorter"
+                    <form id="task-sorter"
                           ref="task-sorter"
                           @submit.prevent="triggerOrderedSorting()">
                         <h2 class="mt-4">How urgent/important is each task?</h2>
@@ -79,7 +80,7 @@
                     </ul>
                 </template>
 
-                <ul class="sorted-list" v-if="!sorting && ordered_tasks.length">
+                <ul class="sorted-list" v-if="!sorting && orderTasks.length">
                     <li v-for="(task, i) in ordered_tasks"
                         :key="i">{{ task.title }}
                     </li>
@@ -105,6 +106,13 @@
         }),
         computed: {
             activeTasks() {
+                return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
+            },
+            orderTasks() {
+                // urgent and important 4+
+                // important but not urgent 4+/3-
+                // not important but urgent 3-/4+
+                // not important not urgent 3-/3-
                 return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
             },
             targetSortingGroup() {

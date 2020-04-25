@@ -25,7 +25,7 @@ function attemptToTriggerSortingUi() {
         .click();
 
     // a form is now available
-    cy.get('form.task-sorter').as('taskSorter')
+    cy.get('#task-sorter').as('taskSorter')
         .should('exist');
 }
 
@@ -81,7 +81,7 @@ describe('Testing todo list', () => {
         cy.get('@taskSorter')
             .get('li').as('taskSortingFields')
             .first()
-            .find('input[id^=important_], input[id^=urgent_]')
+            .find('input[id^=uid]')
             .should('have.length', 10);
 
         // select one on each radio group
@@ -89,18 +89,19 @@ describe('Testing todo list', () => {
             .each(($el, index) => {
                 // click the radio buttons that matches the index (or the last one)
                 cy.wrap($el)
-                    .find('input[name^=important_]')
-                    .eq(index)
+                    .find('input[name$=_uid2]')
+                    .eq(index < 4 ? index : 4)
                     .click();
                 cy.wrap($el)
-                    .find('input[name^=urgent_]')
+                    .find('input[name$=_uid3]')
                     .eq(index < 4 ? index : 4)
                     .click();
             });
 
         // make sure the form is gone
-        cy.get('@taskSorter')
-            .submit()
+        cy.get('#task-sorter')
+            .submit();
+        cy.get('#task-sorter')
             .should('not.exist');
 
         // the ordered list should now be visible

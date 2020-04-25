@@ -21,7 +21,7 @@
     export default Vue.component('sorterRadioGroup', {
         data() {
             return {
-                prefix: `${this.task.id}_${this.category.id}`,
+                prefix: `${(this.task.id).replace('$', '')}_${(this.category.id).replace('$', '')}`,
             }
         },
         props:  {

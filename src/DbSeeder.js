@@ -8,7 +8,9 @@ export default class DbSeeder {
     static init() {
         this.addPublishedStates();
         this.addCategories();
-        this.addBoilerplateTasks();
+        if ( process.env.NODE_ENV === 'development') {
+            this.addBoilerplateTasks();
+        }
     }
 
     // add the published states for items (active, deleted etc.)
