@@ -11,8 +11,8 @@ export default class EisenhowerPrincipleEnum extends AbstractEnum {
 
     static get properties() {
         return {
-            [this.URGENT]: {name: "urgent", value: this.URGENT},
-            [this.IMPORTANT]: {name: "important", value: this.IMPORTANT},
+            [this.URGENT]: {id: this.URGENT, name: "urgent"},
+            [this.IMPORTANT]: {id: this.IMPORTANT, name: "important"},
         }
     }
 }

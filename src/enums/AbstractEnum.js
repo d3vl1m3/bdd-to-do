@@ -7,7 +7,7 @@ export default class AbstractEnum {
     // Uppercase getter name
     static getPropertyByKey(key) {
         return Object.prototype.hasOwnProperty.call(this, key)
-            ? this[key]
+            ? this.properties[key]
             : undefined;
     }
 
@@ -20,8 +20,8 @@ export default class AbstractEnum {
     }
 
     // whatever the value is in the properties object
-    static getPropertyByValue(value) {
-        const key = Object.keys(this.properties).find((k) => this.properties[k].value === value);
+    static getPropertyById(id) {
+        const key = Object.keys(this.properties).find((k) => this.properties[k].id === id);
         return Object.prototype.hasOwnProperty.call(this.properties, key)
             ? this.properties[key]
             : undefined;

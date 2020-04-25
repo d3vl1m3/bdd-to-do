@@ -5,9 +5,11 @@
                 <h1>What needs doing?</h1>
 
                 <form @submit.prevent="addItem" v-if="!sorting">
-                    <input type="text"
+                    <input id="new-task-input"
                            class="new-task-input"
-                           v-model="task">
+                           type="text"
+                           v-model="task"
+                    aria-label="Your new task">
                     <button class="new-task-submit"
                             type="submit">
                         Add
@@ -83,7 +85,7 @@
                         :key="i">{{ task.title }}
                     </li>
                 </ul>
-<pre>
+                <pre>
 {{ activeTasks }}
 </pre>
 
@@ -105,8 +107,8 @@
             task: '',
             sorting: false,
             ordered_tasks: [],
-            important_group_title: EHPEnum.getPropertyByValue(EHPEnum.IMPORTANT).name,
-            urgent_group_title: EHPEnum.getPropertyByValue(EHPEnum.URGENT).name,
+            important_group_title: EHPEnum.getPropertyById(EHPEnum.IMPORTANT).name,
+            urgent_group_title: EHPEnum.getPropertyById(EHPEnum.URGENT).name,
         }),
         computed: {
             activeTasks() {
@@ -147,19 +149,23 @@
 
                 formData.forEach((i) => {
                     const [tag_name, task_id] = i[0].split("_");
-                    Task.insertOrUpdate({
-                        data: [{
-                            id: task_id,
-                            tags: [
-                                {
-                                    ...Tag.find(EHPEnum.getPropertyByName(tag_name).value),
-                                    pivot: {
-                                        order: i[1]
-                                    }
-                                }
-                            ]
-                        }]
-                    })
+                    const tag = Tag.query().where('title', tag_name).get();
+                    console.log(tag.id, task_id);
+                    // @todo: Figure out a decent parent/child system for tags
+                    // Task.insertOrUpdate({
+                    //     data: [{
+                    //         id: `$${task_id}`,
+                    //         tags: [
+                    //             {
+                    //
+                    //                 pivot: {
+                    //                     tag_id: tag.id,
+                    //                     order: i[1]
+                    //                 }
+                    //             }
+                    //         ]
+                    //     }]
+                    // })
                 });
 
                 this.sorting = false;

@@ -34,7 +34,6 @@ export default class DbSeeder {
         Object.keys(EHPEnum.properties).forEach((key) => {
             const property = EHPEnum.properties[key];
             data.push({
-                id: property.value,
                 title: property.name
             });
         });
