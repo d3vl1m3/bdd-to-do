@@ -5,11 +5,12 @@ import StatesEnum from "@/enums/StatesEnum";
 import DefaultCategoriesEnum from "@/enums/DefaultCategoriesEnum";
 
 export default class DbSeeder {
-    static init() {
-        this.addPublishedStates();
-        this.addCategories();
+    static async init() {
+        await this.addPublishedStates();
+        await this.addCategories();
+
         if ( process.env.NODE_ENV === 'development') {
-            this.addBoilerplateTasks();
+            await this.addBoilerplateTasks();
         }
     }
 
@@ -21,15 +22,14 @@ export default class DbSeeder {
             data.push({state: property.name, id: property.value,});
         });
 
-        State.insert({data});
-
+        return State.insert({data});
     }
 
     static addCategories() {
         Object.keys(DefaultCategoriesEnum.properties).forEach((i) => {
             const prop = DefaultCategoriesEnum.properties[i];
 
-            Category.insert({
+            return Category.insert({
                 data: {
                     title: prop.name
                 }
@@ -42,7 +42,7 @@ export default class DbSeeder {
                     data.push({title: child.name, parent_id: parent.id})
                 });
 
-                Category.insertOrUpdate({
+                return Category.insertOrUpdate({
                     data
                 });
             });
@@ -54,7 +54,7 @@ export default class DbSeeder {
 
     // add basic tasks to pre-populate the list
     static addBoilerplateTasks() {
-        Task.insert({
+        return Task.insert({
             data: [
                 {
                     title: 'This',
