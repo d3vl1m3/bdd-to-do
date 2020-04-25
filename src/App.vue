@@ -54,7 +54,8 @@
 
                         <button type="submit"
                                 class="btn btn-primary my-2"
-                        >Done!</button>
+                        >Done!
+                        </button>
                     </form>
                 </template>
 
@@ -76,6 +77,9 @@
                         :key="i">{{ task.title }}
                     </li>
                 </ul>
+<pre>
+{{ activeTasks }}
+</pre>
 
             </div>
         </div>
@@ -100,7 +104,7 @@
         }),
         computed: {
             activeTasks() {
-                return Task.query().where('state_id', StatesEnum.ACTIVE).get();
+                return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
             }
         },
         components: {
@@ -133,25 +137,26 @@
                 });
             },
             triggerOrderedSorting() {
-                const formValues = new FormData(this.$refs['task-sorter']).entries();
+                const formData = Array.from(new FormData(this.$refs['task-sorter']).entries());
 
-                for (const [key, order] of formValues) {
-                    const [tag_name, task_id] = key.split("_");
+                formData.forEach((i) => {
+                    const [tag_name, task_id] = i[0].split("_");
                     Task.insertOrUpdate({
-                        data: {
+                        data: [{
                             id: task_id,
                             tags: [
                                 {
                                     ...Tag.find(EHPEnum.getPropertyByName(tag_name).value),
                                     pivot: {
-                                        order
+                                        order: i[1]
                                     }
                                 }
                             ]
-                        }
-                    });
+                        }]
+                    })
+                });
 
-                }
+                this.sorting = false;
             }
         }
     }
