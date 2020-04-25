@@ -15,6 +15,11 @@ yarn serve
 yarn build
 ```
 
+### Run your E2E tests
+```
+yarn test:e2e
+```
+
 ### Run your unit tests
 ```
 yarn test:unit
