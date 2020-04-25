@@ -6,11 +6,11 @@
               class="sorter-radio-group__form-check form-check">
             <input type="radio"
                    class="form-check-input"
-                   :id="`${group_type}_${group_id}_${n}`"
-                   :name="`${group_type}_${group_id}`"
+                   :id="`${prefix}_order-${n}`"
+                   :name="`${prefix}`"
                    :value="n">
             <label class="form-check-label d-block pr-3"
-                   :for="`${group_type}_${group_id}_${n}`">{{ n }}</label>
+                   :for="`${prefix}_order-${n}`">{{ n }}</label>
         </span>
     </fieldset>
 </template>
@@ -19,17 +19,22 @@
     import Vue from "vue";
 
     export default Vue.component('sorterRadioGroup', {
+        data() {
+            return {
+                prefix: `${this.task.id}_${this.category.id}`,
+            }
+        },
         props:  {
             legend_text: {
               type: String,
               default: ''
             },
-            group_type: {
-                type: String,
-                required: true // e.g. 'important' or 'urgent'
+            task: {
+                type: Object,
+                required: true
             },
-            group_id: {
-                type: String,
+            category: {
+                type: Object,
                 required: true
             }
         }

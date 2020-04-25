@@ -1,7 +1,7 @@
 import {Model} from '@vuex-orm/core'
 import State from "@/models/State";
-import Tag from "@/models/Tag";
-import TaskTag from "@/models/TaskTag";
+import Category from "@/models/Category";
+import TaskCategory from "@/models/TaskCategory";
 
 export default class Task extends Model {
     // This is the name used as module name of the Vuex Store.
@@ -15,7 +15,7 @@ export default class Task extends Model {
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
-            tags: this.belongsToMany(Tag, TaskTag, 'task_id', 'tag_id')
+            categories: this.belongsToMany(Category, TaskCategory, 'task_id', 'category_id')
         }
     }
 }

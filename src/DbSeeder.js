@@ -1,13 +1,13 @@
 import State from "@/models/State";
-import Tag from "@/models/Tag";
+import Category from "@/models/Category";
 import Task from "@/models/Task";
-import EHPEnum from "@/enums/EisenhowerPrincipleEnum";
 import StatesEnum from "@/enums/StatesEnum";
+import DefaultCategoriesEnum from "@/enums/DefaultCategoriesEnum";
 
 export default class DbSeeder {
     static init() {
         this.addPublishedStates();
-        this.addTags();
+        this.addCategories();
         this.addBoilerplateTasks();
     }
 
@@ -23,23 +23,31 @@ export default class DbSeeder {
 
     }
 
-    static addTags() {
-        this.addEisenhowerPrinciple();
-    }
+    static addCategories() {
+        Object.keys(DefaultCategoriesEnum.properties).forEach((i) => {
+            const prop = DefaultCategoriesEnum.properties[i];
 
-    // add basic tasks to pre-populate the list
-    static addEisenhowerPrinciple() {
-        const data = [];
+            Category.insert({
+                data: {
+                    title: prop.name
+                }
+            }).then((parentCollection) => {
+                const parent = parentCollection.categories[0];
+                const data = [];
 
-        Object.keys(EHPEnum.properties).forEach((key) => {
-            const property = EHPEnum.properties[key];
-            data.push({
-                title: property.name
+                Object.keys(prop.data.properties).forEach((j) => {
+                    const child = prop.data.properties[j];
+                    data.push({title: child.name, parent_id: parent.id})
+                });
+
+                Category.insertOrUpdate({
+                    data
+                });
             });
+
+
+
         });
-
-        Tag.insert({data});
-
     }
 
     // add basic tasks to pre-populate the list

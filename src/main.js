@@ -4,8 +4,8 @@ import VuexORM from '@vuex-orm/core'
 import App from './App.vue'
 import State from '@/models/State'
 import Task from '@/models/Task'
-import Tag from '@/models/Tag'
-import TaskTag from '@/models/TaskTag'
+import Category from '@/models/Category'
+import TaskCategory from '@/models/TaskCategory'
 import DbSeeder from '@/DbSeeder'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
@@ -19,8 +19,8 @@ const database = new VuexORM.Database();
 // Register Models to Database.
 database.register(State);
 database.register(Task);
-database.register(Tag);
-database.register(TaskTag);
+database.register(Category);
+database.register(TaskCategory);
 
 const store = new Vuex.Store({
     plugins: [VuexORM.install(database)]

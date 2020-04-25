@@ -1,15 +1,15 @@
 import {Model} from "@vuex-orm/core";
 
-export default class TaskTag extends Model {
-    static entity = 'taskTag';
+export default class TaskCategory extends Model {
+    static entity = 'taskCategory';
 
-    static primaryKey = ['task_id', 'tag_id'];
+    static primaryKey = ['task_id', 'category_id'];
 
     static fields() {
         return {
             id: this.attr(null),
             task_id: this.attr(null),
-            tag_id: this.attr(null),
+            category_id: this.attr(null),
             order: this.number(1)
         }
     }

@@ -3,7 +3,6 @@
         <div class="container">
             <div class="row-cols-1">
                 <h1>What needs doing?</h1>
-
                 <form @submit.prevent="addItem" v-if="!sorting">
                     <input id="new-task-input"
                            class="new-task-input"
@@ -42,13 +41,13 @@
                                 <li class="row row-cols-2">
                                     <sorter-radio-group v-bind="{
                                         legend_text: 'How Important?',
-                                        group_id: task.id,
-                                        group_type: important_group_title
+                                        task,
+                                        category: targetSortingGroup.children[1]
                                     }"/>
                                     <sorter-radio-group v-bind="{
                                         legend_text: 'How Urgent?',
-                                        group_id: task.id,
-                                        group_type: urgent_group_title
+                                        task,
+                                        category: targetSortingGroup.children[0]
                                     }"/>
                                 </li>
                             </ul>
@@ -85,10 +84,6 @@
                         :key="i">{{ task.title }}
                     </li>
                 </ul>
-                <pre>
-{{ activeTasks }}
-</pre>
-
             </div>
         </div>
     </div>
@@ -98,22 +93,26 @@
     import sorterRadioGroup from "@/components/sorterRadioGroup/component"
     import Task from '@/models/Task'
     import StatesEnum from "@/enums/StatesEnum";
-    import EHPEnum from "@/enums/EisenhowerPrincipleEnum";
-    import Tag from "@/models/Tag";
+    import Category from "@/models/Category";
+    import TaskCategory from "@/models/TaskCategory";
 
     export default {
         data: () => ({
             hide: false,
             task: '',
             sorting: false,
-            ordered_tasks: [],
-            important_group_title: EHPEnum.getPropertyById(EHPEnum.IMPORTANT).name,
-            urgent_group_title: EHPEnum.getPropertyById(EHPEnum.URGENT).name,
+            ordered_tasks: []
         }),
         computed: {
             activeTasks() {
                 return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
-            }
+            },
+            targetSortingGroup() {
+                return Category.query()
+                    .where('id','$uid1')
+                    .with('children')
+                    .first();
+            },
         },
         components: {
             sorterRadioGroup
@@ -148,24 +147,16 @@
                 const formData = Array.from(new FormData(this.$refs['task-sorter']).entries());
 
                 formData.forEach((i) => {
-                    const [tag_name, task_id] = i[0].split("_");
-                    const tag = Tag.query().where('title', tag_name).get();
-                    console.log(tag.id, task_id);
-                    // @todo: Figure out a decent parent/child system for tags
-                    // Task.insertOrUpdate({
-                    //     data: [{
-                    //         id: `$${task_id}`,
-                    //         tags: [
-                    //             {
-                    //
-                    //                 pivot: {
-                    //                     tag_id: tag.id,
-                    //                     order: i[1]
-                    //                 }
-                    //             }
-                    //         ]
-                    //     }]
-                    // })
+                    const [task_id, category_id] = i[0].split("_");
+                    const order = i[1];
+
+                    TaskCategory.insertOrUpdate({
+                        data: [{
+                            task_id,
+                            category_id,
+                            order
+                        }]
+                    })
                 });
 
                 this.sorting = false;
