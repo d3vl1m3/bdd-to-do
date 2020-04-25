@@ -15,7 +15,7 @@ export default class Task extends Model {
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
-            tags: this.belongsToMany(Tag, TaskTag, 'task_id', 'tag_id').as('tag')
+            tags: this.belongsToMany(Tag, TaskTag, 'task_id', 'tag_id')
         }
     }
 }

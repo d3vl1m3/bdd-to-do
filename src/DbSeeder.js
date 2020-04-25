@@ -1,7 +1,7 @@
 import State from "@/models/State";
 import Tag from "@/models/Tag";
 import Task from "@/models/Task";
-import EisenhowerPrincipleEnum from "@/enums/EisenhowerPrincipleEnum";
+import EHPEnum from "@/enums/EisenhowerPrincipleEnum";
 import StatesEnum from "@/enums/StatesEnum";
 
 export default class DbSeeder {
@@ -14,103 +14,12 @@ export default class DbSeeder {
     // add the published states for items (active, deleted etc.)
     static addPublishedStates() {
         const data = [];
-        Object.keys(StatesEnum).forEach((key) => {
-            if (key === 'properties')
-                return;
-
-            data.push({state: StatesEnum.properties[StatesEnum[key]].name, id: StatesEnum[key],});
+        Object.keys(StatesEnum.properties).forEach((key) => {
+            const property = StatesEnum.properties[key];
+            data.push({state: property.name, id: property.value,});
         });
 
         State.insert({data});
-
-    }
-
-    // add basic tasks to pre-populate the list
-    static addBoilerplateTasks() {
-        Task.insert({
-            data: [
-                {
-                    title: 'This',
-                    state_id: StatesEnum.ACTIVE,
-                    tags: [
-                        {
-                            ...Tag.find(0),
-                            tag: {
-                                id: 1,
-                                order: 2
-                            }
-                        },
-                        {
-                            ...Tag.find(1),
-                            tag: {
-                                id: 1,
-                                order: 5
-                            }
-                        }
-                    ]
-                },
-                {
-                    title: 'that',
-                    state_id: StatesEnum.ACTIVE,
-                    tags: [
-                        {
-                            ...Tag.find(0),
-                            tag: {
-                                id: 1,
-                                order: 3
-                            }
-                        },
-                        {
-                            ...Tag.find(1),
-                            tag: {
-                                id: 1,
-                                order: 3
-                            }
-                        }
-                    ]
-                },
-                {
-                    title: 'the',
-                    state_id: StatesEnum.ACTIVE,
-                    tags: [
-                        {
-                            ...Tag.find(0),
-                            tag: {
-                                id: 1,
-                                order: 1
-                            }
-                        },
-                        {
-                            ...Tag.find(1),
-                            tag: {
-                                id: 1,
-                                order: 4
-                            }
-                        }
-                    ]
-                },
-                {
-                    title: 'other.',
-                    state_id: StatesEnum.ACTIVE,
-                    tags: [
-                        {
-                            ...Tag.find(0),
-                            tag: {
-                                id: 1,
-                                order: 4
-                            }
-                        },
-                        {
-                            ...Tag.find(1),
-                            tag: {
-                                id: 1,
-                                order: 2
-                            }
-                        }
-                    ]
-                },
-            ]
-        });
 
     }
 
@@ -122,18 +31,40 @@ export default class DbSeeder {
     static addEisenhowerPrinciple() {
         const data = [];
 
-        Object.keys(EisenhowerPrincipleEnum).forEach((key) => {
-            // ignore properties key
-            if (key === 'properties')
-                return;
-
+        Object.keys(EHPEnum.properties).forEach((key) => {
+            const property = EHPEnum.properties[key];
             data.push({
-                id: EisenhowerPrincipleEnum[key],
-                title: EisenhowerPrincipleEnum.properties[EisenhowerPrincipleEnum[key]].name
+                id: property.value,
+                title: property.name
             });
         });
 
         Tag.insert({data});
+
+    }
+
+    // add basic tasks to pre-populate the list
+    static addBoilerplateTasks() {
+        Task.insert({
+            data: [
+                {
+                    title: 'This',
+                    state_id: StatesEnum.ACTIVE
+                },
+                {
+                    title: 'that',
+                    state_id: StatesEnum.ACTIVE
+                },
+                {
+                    title: 'the',
+                    state_id: StatesEnum.ACTIVE
+                },
+                {
+                    title: 'other.',
+                    state_id: StatesEnum.ACTIVE
+                },
+            ]
+        });
 
     }
 }

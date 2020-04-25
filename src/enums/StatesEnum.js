@@ -1,13 +1,29 @@
 // Used for tracking the current published state of an item
-export default {
-    ACTIVE: 0,
-    INACTIVE: 1,
-    ARCHIVED: 2,
-    DELETED: 3,
-    properties: {
-        0: {name: "active", value: 0},
-        1: {name: "inactive", value: 1},
-        2: {name: "archived", value: 2},
-        3: {name: "deleted", value: 3}
+import AbstractEnum from "@/enums/AbstractEnum";
+
+export default class StatesEnum extends AbstractEnum {
+    static get ACTIVE() {
+        return 0;
     }
-};
+
+    static get INACTIVE() {
+        return 1;
+    }
+
+    static get ARCHIVED() {
+        return 2;
+    }
+
+    static get DELETED() {
+        return 3;
+    }
+
+    static get properties() {
+        return {
+            [this.ACTIVE]: {name: "delete", value: this.ACTIVE},
+            [this.INACTIVE]: {name: "delegate", value: this.INACTIVE},
+            [this.ARCHIVED]: {name: "defer", value: this.ARCHIVED},
+            [this.DELETED]: {name: "do", value: this.DELETED},
+        }
+    }
+}

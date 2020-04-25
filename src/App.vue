@@ -41,12 +41,12 @@
                                     <sorter-radio-group v-bind="{
                                         legend_text: 'How Important?',
                                         group_id: task.id,
-                                        group_type: 'important'
+                                        group_type: important_group_title
                                     }"/>
                                     <sorter-radio-group v-bind="{
                                         legend_text: 'How Urgent?',
                                         group_id: task.id,
-                                        group_type: 'urgent'
+                                        group_type: urgent_group_title
                                     }"/>
                                 </li>
                             </ul>
@@ -86,13 +86,17 @@
     import sorterRadioGroup from "@/components/sorterRadioGroup/component"
     import Task from '@/models/Task'
     import StatesEnum from "@/enums/StatesEnum";
+    import EHPEnum from "@/enums/EisenhowerPrincipleEnum";
+    import Tag from "@/models/Tag";
 
     export default {
         data: () => ({
             hide: false,
             task: '',
             sorting: false,
-            ordered_tasks: []
+            ordered_tasks: [],
+            important_group_title: EHPEnum.getPropertyByValue(EHPEnum.IMPORTANT).name,
+            urgent_group_title: EHPEnum.getPropertyByValue(EHPEnum.URGENT).name,
         }),
         computed: {
             activeTasks() {
@@ -131,8 +135,22 @@
             triggerOrderedSorting() {
                 const formValues = new FormData(this.$refs['task-sorter']).entries();
 
-                for (const [key, value] of formValues) {
-                    console.log(key, value);
+                for (const [key, order] of formValues) {
+                    const [tag_name, task_id] = key.split("_");
+                    Task.insertOrUpdate({
+                        data: {
+                            id: task_id,
+                            tags: [
+                                {
+                                    ...Tag.find(EHPEnum.getPropertyByName(tag_name).value),
+                                    pivot: {
+                                        order
+                                    }
+                                }
+                            ]
+                        }
+                    });
+
                 }
             }
         }
