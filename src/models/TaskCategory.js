@@ -7,10 +7,9 @@ export default class TaskCategory extends Model {
 
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             task_id: this.attr(null),
-            category_id: this.attr(null),
-            order: this.number(1)
+            category_id: this.attr(null)
         }
     }
 }

@@ -18,16 +18,16 @@
 <script>
     import Vue from "vue";
 
-    export default Vue.component('sorterRadioGroup', {
+    export default Vue.component('RadioButtonCollection', {
         data() {
             return {
-                prefix: `${(this.task.id).replace('$', '')}_${(this.category.id).replace('$', '')}`,
+                prefix: `${(this.task.$id).replace('$', '')}_${(this.category.$id).replace('$', '')}`,
             }
         },
         props:  {
             legend_text: {
-              type: String,
-              default: ''
+                type: String,
+                default: ''
             },
             task: {
                 type: Object,

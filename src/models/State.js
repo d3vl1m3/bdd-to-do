@@ -8,7 +8,7 @@ export default class State extends Model {
     // for the generic field type. The argument is the default value.
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             state: this.attr('')
         }
     }

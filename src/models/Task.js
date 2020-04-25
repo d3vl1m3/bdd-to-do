@@ -11,11 +11,11 @@ export default class Task extends Model {
     // for the generic field type. The argument is the default value.
     static fields() {
         return {
-            id: this.attr(null),
+            id: this.uid(),
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
-            categories: this.belongsToMany(Category, TaskCategory, 'task_id', 'category_id')
+            categories: this.belongsToMany(Category, TaskCategory, 'task_id', 'category_id'),
         }
     }
 }

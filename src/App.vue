@@ -17,7 +17,7 @@
                     <button class="task-sort-trigger"
                             type="button"
                             @click.prevent="sorting = true"
-                            :disabled="!activeTasks.length">
+                            :disabled="!getActiveTasks.length">
                         <template v-if="sorting">
                             Redo!
                         </template>
@@ -28,42 +28,11 @@
                 </form>
 
                 <template v-if="sorting">
-                    <form id="task-sorter"
-                          ref="task-sorter"
-                          @submit.prevent="triggerOrderedSorting()">
-                        <h2 class="mt-4">How urgent/important is each task?</h2>
-
-                        <div v-for="(task, i) in activeTasks"
-                             :key="i"
-                             class="sorting-task__item-questions sorting-task-question-container my-4 p-3">
-                            <h3>{{ task.title }}</h3>
-
-                            <ul class="container">
-                                <li class="row row-cols-2">
-                                    <sorter-radio-group v-bind="{
-                                        legend_text: 'How Important?',
-                                        task,
-                                        category: targetSortingGroup.children[1]
-                                    }"/>
-                                    <sorter-radio-group v-bind="{
-                                        legend_text: 'How Urgent?',
-                                        task,
-                                        category: targetSortingGroup.children[0]
-                                    }"/>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <button type="submit"
-                                class="btn btn-primary my-2"
-                        >Done!
-                        </button>
-                    </form>
+                    <eisenhower-sorting :sorting.sync="sorting"/>
                 </template>
-
                 <template v-else-if="!sorting">
                     <ul class="task-list">
-                        <li v-for="(task, i) in activeTasks"
+                        <li v-for="(task, i) in getActiveTasksWithCategories"
                             :key="i">
                             {{ task.title }}
                             <font-awesome-icon
@@ -71,31 +40,29 @@
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
 
-                            <ul v-if="task.tags">
-                                <li v-for="(tag, i) in task.tags" :key="i">
-                                    {{ tag.title }} {{ tag.pivot.order }}
+                            <ul v-if="task.categories">
+                                <li v-for="(category, i) in task.categories" :key="i">
+                                    {{ category.title }} {{ category.pivot.order }}
                                 </li>
                             </ul>
                         </li>
                     </ul>
                 </template>
 
-                <ul class="sorted-list" v-if="!sorting && orderTasks.length">
-                    <li v-for="(task, i) in ordered_tasks"
-                        :key="i">{{ task.title }}
-                    </li>
-                </ul>
+                <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksWithCategories.length"/>
+
+                <pre>{{ getActiveTasksWithCategories }}</pre>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import sorterRadioGroup from "@/components/sorterRadioGroup/component"
     import Task from '@/models/Task'
     import StatesEnum from "@/enums/StatesEnum";
-    import Category from "@/models/Category";
-    import TaskCategory from "@/models/TaskCategory";
+    import TaskService from "@/services/TaskService";
+    import EisenhowerSorting from "@/components/forms/EisenhowerSorting/componet.vue";
+    import EisenhowerSortedList from "@/components/lists/EisenhowerSortedList/component.vue";
 
     export default {
         data: () => ({
@@ -104,26 +71,12 @@
             sorting: false,
             ordered_tasks: []
         }),
-        computed: {
-            activeTasks() {
-                return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
-            },
-            orderTasks() {
-                // urgent and important 4+
-                // important but not urgent 4+/3-
-                // not important but urgent 3-/4+
-                // not important not urgent 3-/3-
-                return Task.query().where('state_id', StatesEnum.ACTIVE).with('tags').get();
-            },
-            targetSortingGroup() {
-                return Category.query()
-                    .where('id','$uid1')
-                    .with('children')
-                    .first();
-            },
-        },
+        mixins: [
+            TaskService
+        ],
         components: {
-            sorterRadioGroup
+            EisenhowerSorting,
+            EisenhowerSortedList
         },
         methods: {
             addItem() {
@@ -150,24 +103,6 @@
                     id,
                     state_id: StatesEnum.DELETED
                 });
-            },
-            triggerOrderedSorting() {
-                const formData = Array.from(new FormData(this.$refs['task-sorter']).entries());
-
-                formData.forEach((i) => {
-                    const [task_id, category_id] = i[0].split("_");
-                    const order = i[1];
-
-                    TaskCategory.insertOrUpdate({
-                        data: [{
-                            task_id,
-                            category_id,
-                            order
-                        }]
-                    })
-                });
-
-                this.sorting = false;
             }
         }
     }

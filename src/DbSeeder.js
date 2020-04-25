@@ -5,12 +5,14 @@ import StatesEnum from "@/enums/StatesEnum";
 import DefaultCategoriesEnum from "@/enums/DefaultCategoriesEnum";
 
 export default class DbSeeder {
-    static async init() {
-        await this.addPublishedStates();
-        await this.addCategories();
+    static init() {
+        const states = this.addPublishedStates();
+        const categories = this.addCategories();
 
-        if ( process.env.NODE_ENV === 'development') {
-            await this.addBoilerplateTasks();
+        if (process.env.NODE_ENV === 'development') {
+            Promise.all([states, categories]).then(() => {
+                this.addBoilerplateTasks();
+            });
         }
     }
 
@@ -48,7 +50,6 @@ export default class DbSeeder {
             });
 
 
-
         });
     }
 
@@ -73,7 +74,6 @@ export default class DbSeeder {
                     state_id: StatesEnum.ACTIVE
                 },
             ]
-        });
-
+        })
     }
 }
