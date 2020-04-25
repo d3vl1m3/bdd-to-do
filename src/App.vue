@@ -9,7 +9,7 @@
                            class="new-task-input"
                            type="text"
                            v-model="task"
-                    aria-label="Your new task">
+                           aria-label="Your new task">
                     <button class="new-task-submit"
                             type="submit">
                         Add
