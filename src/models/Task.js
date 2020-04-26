@@ -1,6 +1,5 @@
 import {Model} from '@vuex-orm/core'
 import State from "@/models/State";
-import Category from "@/models/Category";
 import TaskCategory from "@/models/TaskCategory";
 
 export default class Task extends Model {
@@ -15,8 +14,7 @@ export default class Task extends Model {
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
-            categories: this.belongsToMany(Category, TaskCategory, 'task_id', 'category_id'),
-            taskCategories: this.hasMany(TaskCategory, 'task_id'),
+            categories: this.hasMany(TaskCategory, 'task_id'),
         }
     }
 }

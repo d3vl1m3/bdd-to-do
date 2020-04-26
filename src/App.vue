@@ -34,15 +34,16 @@
                     <ul class="task-list">
                         <li v-for="(task, i) in test"
                             :key="i">
-                            {{ task.taskCategories }}
+                            {{ task.title }}
                             <font-awesome-icon
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
-<pre>
-    {{task}}
-</pre>
-                            <ul v-if="task.taskCategories">
+
+                            <ul v-if="task.categories">
+                                <li v-for="(pivot, i) in task.categories" :key="i">
+                                    {{ pivot.category }} {{ pivot.order }}
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -50,7 +51,7 @@
 
                 <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksWithCategories.length"/>
 
-                <pre>Test: {{ test }}</pre>
+                <pre>{{ test }}</pre>
             </div>
         </div>
     </div>
