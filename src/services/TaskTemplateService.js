@@ -5,14 +5,11 @@ import Vue from 'vue';
 
 export default Vue.mixin({
     computed: {
-        test() {
-            return Task.query().withAll().get();
-        },
         getActiveTasks() {
             return Task.query().where('state_id', StatesEnum.ACTIVE).get();
         },
         getActiveTasksWithCategories() {
-            return Task.query().where('state_id', StatesEnum.ACTIVE).with('categories').get();
+            return Task.query().where('state_id', StatesEnum.ACTIVE).withAllRecursive(2).get();
         }
     }
 });

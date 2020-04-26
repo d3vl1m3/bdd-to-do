@@ -36,7 +36,7 @@
     import Vue from 'vue';
     import Category from "@/models/Category";
     import RadioButtonCollection from "@/components/inputs/RadioButtonCollection/component.vue";
-    import TaskService from "@/services/TaskService";
+    import TaskService from "@/services/TaskTemplateService";
     import TaskCategory from "@/models/TaskCategory";
 
 

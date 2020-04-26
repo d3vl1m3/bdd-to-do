@@ -9,35 +9,44 @@
 
 <script>
     import Vue from "vue"
-    import TaskService from "@/services/TaskService"
+    import TaskTemplateService from "@/services/TaskTemplateService"
+    import Task from "@/models/Task";
+    import StatesEnum from "@/enums/StatesEnum";
 
     export default Vue.component('EisenhowerSortedList', {
         mixins: [
-            TaskService
+            TaskTemplateService
         ],
         computed: {
             sortedItems() {
-                const tasks = this.getActiveTasksWithCategories;
-                tasks.forEach((a, b) => {
-                    // a is less than b by some ordering criterion
-                    if ( a < b) {
-                        return -1;
+                const tasks = Task.query()
+                    .where('state_id', StatesEnum.ACTIVE)
+                    .withAllRecursive(2)
+                    .get();
+
+                tasks.sort((a,b) => {
+
+                    if (
+                        a.categories.length
+                        && b.categories.length
+                    ) {
+                        if ( a.categories[0].order < b.categories[0].order ) {
+                            return 1;
+                        }
+                        if ( a.categories[0].order > b.categories[0].order ) {
+                            return -1;
+                        }
+                        if ( a.categories[1].order < b.categories[1].order ) {
+                            return 1;
+                        }
+                        if ( a.categories[1].order > b.categories[1].order ) {
+                            return -1;
+                        }
                     }
-                    // a is greater than b by the ordering criterion
-                    if ( a > b) {
-                        return 1;
-                    }
-                    // a is less than b by some ordering criterion
-                    if ( a < b) {
-                        return -1;
-                    }
-                    // a is greater than b by the ordering criterion
-                    if ( a > b) {
-                        return 1;
-                    }
-                    // a must be equal to b
+
                     return 0;
                 });
+
                 return tasks;
             }
         }

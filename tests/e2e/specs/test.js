@@ -105,7 +105,7 @@ describe('Testing todo list', () => {
             .should('not.exist');
 
         // the ordered list should now be visible
-        cy.get('.sorted-list').as('@sortedList')
+        cy.get('.sorted-list').as('sortedList')
             .should('be.visible')
             .children('li')
             .first()

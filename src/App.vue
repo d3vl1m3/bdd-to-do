@@ -3,6 +3,7 @@
         <div class="container">
             <div class="row-cols-1">
                 <h1>What needs doing?</h1>
+
                 <form @submit.prevent="addItem" v-if="!sorting">
                     <input id="new-task-input"
                            class="new-task-input"
@@ -30,19 +31,24 @@
                 <template v-if="sorting">
                     <eisenhower-sorting :sorting.sync="sorting"/>
                 </template>
+
                 <template v-else-if="!sorting">
                     <ul class="task-list">
-                        <li v-for="(task, i) in test"
+                        <li v-for="(task, i) in getActiveTasksWithCategories"
                             :key="i">
                             {{ task.title }}
+                            {{ task.id }}
                             <font-awesome-icon
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
+                            <pre>
+                            {{ task.categories }}
+                            </pre>
 
                             <ul v-if="task.categories">
-                                <li v-for="(pivot, i) in task.categories" :key="i">
-                                    {{ pivot.category }} {{ pivot.order }}
+                                <li v-for="(category, i) in task.categories" :key="i">
+                                    {{ category.title }} {{ category.order }}
                                 </li>
                             </ul>
                         </li>
@@ -51,7 +57,6 @@
 
                 <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksWithCategories.length"/>
 
-                <pre>{{ test }}</pre>
             </div>
         </div>
     </div>
@@ -60,7 +65,7 @@
 <script>
     import Task from '@/models/Task'
     import StatesEnum from "@/enums/StatesEnum";
-    import TaskService from "@/services/TaskService";
+    import TaskService from "@/services/TaskTemplateService";
     import EisenhowerSorting from "@/components/forms/EisenhowerSorting/componet.vue";
     import EisenhowerSortedList from "@/components/lists/EisenhowerSortedList/component.vue";
 
