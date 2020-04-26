@@ -3,6 +3,7 @@ import Category from "@/models/Category";
 import Task from "@/models/Task";
 import StatesEnum from "@/enums/StatesEnum";
 import DefaultCategoriesEnum from "@/enums/DefaultCategoriesEnum";
+import TaskCategory from "@/models/TaskCategory";
 
 export default class DbSeeder {
     static init() {
@@ -55,11 +56,11 @@ export default class DbSeeder {
 
     // add basic tasks to pre-populate the list
     static addBoilerplateTasks() {
-        return Task.insert({
+        return Task.create({
             data: [
                 {
                     title: 'This',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: StatesEnum.ACTIVE,
                 },
                 {
                     title: 'that',
@@ -74,6 +75,24 @@ export default class DbSeeder {
                     state_id: StatesEnum.ACTIVE
                 },
             ]
+        }).then((c) => {
+
+            const target_categories = Category.query()
+                .where('title', 'urgent')
+                .orWhere('title', 'important')
+                .get();
+
+            c.tasks.forEach((t) => {
+                target_categories.forEach((tc) => {
+                    TaskCategory.insert({
+                        data: {
+                            task_id: t.id,
+                            category_id: tc.id,
+                            order: Math.round(Math.random() * (5 - 1) + 1)
+                        }
+                    })
+                })
+            })
         })
     }
 }

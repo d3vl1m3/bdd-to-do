@@ -32,18 +32,17 @@
                 </template>
                 <template v-else-if="!sorting">
                     <ul class="task-list">
-                        <li v-for="(task, i) in getActiveTasksWithCategories"
+                        <li v-for="(task, i) in test"
                             :key="i">
-                            {{ task.title }}
+                            {{ task.taskCategories }}
                             <font-awesome-icon
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
-
-                            <ul v-if="task.categories">
-                                <li v-for="(category, i) in task.categories" :key="i">
-                                    {{ category.title }} {{ category.pivot.order }}
-                                </li>
+<pre>
+    {{task}}
+</pre>
+                            <ul v-if="task.taskCategories">
                             </ul>
                         </li>
                     </ul>
@@ -51,7 +50,7 @@
 
                 <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksWithCategories.length"/>
 
-                <pre>{{ getActiveTasksWithCategories }}</pre>
+                <pre>Test: {{ test }}</pre>
             </div>
         </div>
     </div>

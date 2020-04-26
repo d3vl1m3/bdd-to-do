@@ -5,6 +5,9 @@ import Vue from 'vue';
 
 export default Vue.mixin({
     computed: {
+        test() {
+            return Task.query().withAll().get();
+        },
         getActiveTasks() {
             return Task.query().where('state_id', StatesEnum.ACTIVE).get();
         },
