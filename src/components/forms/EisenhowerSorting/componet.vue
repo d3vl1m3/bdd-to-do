@@ -64,10 +64,12 @@
 
                 formData.forEach((i) => {
                     const [task_id, category_id] = i[0].split("_");
+                    const order = i[1];
                     TaskCategory.insert({
                         data: {
                             task_id: `$${task_id}`,
                             category_id: `$${category_id}`,
+                            order,
                         }
                     })
                 });

@@ -42,9 +42,6 @@
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
-                            <pre>
-                            {{ task.categories }}
-                            </pre>
 
                             <ul v-if="task.categories">
                                 <li v-for="(category, i) in task.categories" :key="i">
