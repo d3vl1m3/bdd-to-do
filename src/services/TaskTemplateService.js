@@ -8,8 +8,17 @@ export default Vue.mixin({
         getActiveTasks() {
             return Task.query().where('state_id', StatesEnum.ACTIVE).get();
         },
-        getActiveTasksWithCategories() {
-            return Task.query().where('state_id', StatesEnum.ACTIVE).withAllRecursive(2).get();
+        getAllActiveTasks() {
+            return Task.query()
+                .where('state_id', StatesEnum.ACTIVE)
+                .withAllRecursive(2)
+                .get();
+        },
+        getActiveTasksOnlyWithActiveCategories() {
+            return Task.query()
+                .where('state_id', StatesEnum.ACTIVE)
+                .has('categories', '>', 1)
+                .get();
         }
     }
 });

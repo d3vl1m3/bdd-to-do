@@ -21,7 +21,8 @@
             sortedItems() {
                 const tasks = Task.query()
                     .where('state_id', StatesEnum.ACTIVE)
-                    .withAllRecursive(2)
+                    .has('categories', '>', 1)
+                    .withAll()
                     .get();
 
                 tasks.sort((a,b) => {

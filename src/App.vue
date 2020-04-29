@@ -18,7 +18,7 @@
                     <button class="task-sort-trigger"
                             type="button"
                             @click.prevent="sorting = true"
-                            :disabled="!getActiveTasks.length">
+                            :disabled="!getAllActiveTasks.length">
                         <template v-if="sorting">
                             Redo!
                         </template>
@@ -34,25 +34,18 @@
 
                 <template v-else-if="!sorting">
                     <ul class="task-list">
-                        <li v-for="(task, i) in getActiveTasksWithCategories"
+                        <li v-for="(task, i) in getAllActiveTasks"
                             :key="i">
                             {{ task.title }}
-                            {{ task.id }}
                             <font-awesome-icon
                                     icon="times-circle"
                                     class="task-item-close"
                                     @click="removeItem(task.id)"/>
-
-                            <ul v-if="task.categories">
-                                <li v-for="(category, i) in task.categories" :key="i">
-                                    {{ category.title }} {{ category.order }}
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </template>
 
-                <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksWithCategories.length"/>
+                <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksOnlyWithActiveCategories.length"/>
 
             </div>
         </div>
@@ -102,8 +95,10 @@
             },
             removeItem(id) {
                 Task.update({
-                    id,
-                    state_id: StatesEnum.DELETED
+                    where: id,
+                    data: {
+                        state_id: StatesEnum.DELETED
+                    }
                 });
             }
         }
