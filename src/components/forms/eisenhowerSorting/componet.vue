@@ -1,7 +1,7 @@
 <template>
     <form id="task-sorter"
           ref="task-sorter"
-          @submit.prevent="triggerOrderedSorting()">
+          @submit.prevent="updateOrderingData()">
         <h2 class="mt-4">How urgent/important is each task?</h2>
 
         <div v-for="(task, i) in getActiveTasks"
@@ -35,7 +35,7 @@
 <script>
     import Vue from 'vue';
     import Category from "@/models/Category";
-    import RadioButtonCollection from "@/components/inputs/RadioButtonCollection/component.vue";
+    import RadioButtonCollection from "@/components/inputs/radioButtonCollection/component.vue";
     import TaskService from "@/services/TaskTemplateService";
     import TaskCategory from "@/models/TaskCategory";
 
@@ -59,7 +59,7 @@
             TaskService
         ],
         methods: {
-            triggerOrderedSorting() {
+            updateOrderingData() {
                 const formData = Array.from(new FormData(this.$refs['task-sorter']).entries());
 
                 formData.forEach((i) => {

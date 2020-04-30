@@ -55,7 +55,7 @@ describe('Testing todo list', () => {
         cy.get('@taskList')
             .children('li')
             .contains('0') // get the specific item with 0 in it's content
-            .find('.task-item-close')
+            .find('.task-item-remove')
             .click();
 
         // length is updated
@@ -113,4 +113,35 @@ describe('Testing todo list', () => {
 
         // item at the top should be the last item that was originally entered
     });
+
+    it('Mark tasks as complete/incomplete and back again', () => {
+        // the content in the original list to look for
+        const listItemTarget = '0';
+
+        // click the delete icon on the 3rd item
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget)
+            .find('.task-item-done')
+            .click();
+
+        // item should no longer exist in the initial list
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget)
+            .should('not.exist');
+
+        // the 'complete' items should be added to a separate completed list.
+        cy.get('.done-list').as('doneList')
+            .children('li')
+            .contains(listItemTarget)
+            .should('exist')
+            .find('.task-item-not-done')
+            .click();
+
+        // when a user tags the completed task as incomplete, it finds its way back on to the top list
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget);
+    })
 });

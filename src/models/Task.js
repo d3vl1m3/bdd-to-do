@@ -1,6 +1,7 @@
 import {Model} from '@vuex-orm/core'
 import State from "@/models/State";
 import TaskCategory from "@/models/TaskCategory";
+import DoneStatesEnum from "@/enums/DoneStatesEnum";
 
 export default class Task extends Model {
     // This is the name used as module name of the Vuex Store.
@@ -14,6 +15,7 @@ export default class Task extends Model {
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
+            done: this.attr(DoneStatesEnum.NOT_DONE),
             categories: this.hasMany(TaskCategory, 'task_id'),
         }
     }

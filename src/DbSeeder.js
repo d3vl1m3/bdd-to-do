@@ -1,7 +1,7 @@
 import State from "@/models/State";
 import Category from "@/models/Category";
 import Task from "@/models/Task";
-import StatesEnum from "@/enums/StatesEnum";
+import ActiveStatesEnum from "@/enums/ActiveStatesEnum";
 import DefaultCategoriesEnum from "@/enums/DefaultCategoriesEnum";
 
 export default class DbSeeder {
@@ -19,8 +19,8 @@ export default class DbSeeder {
     // add the published states for items (active, deleted etc.)
     static addPublishedStates() {
         const data = [];
-        Object.keys(StatesEnum.properties).forEach((key) => {
-            const property = StatesEnum.properties[key];
+        Object.keys(ActiveStatesEnum.properties).forEach((key) => {
+            const property = ActiveStatesEnum.properties[key];
             data.push({state: property.name, id: property.value,});
         });
 
@@ -59,19 +59,19 @@ export default class DbSeeder {
             data: [
                 {
                     title: 'This',
-                    state_id: StatesEnum.ACTIVE,
+                    state_id: ActiveStatesEnum.ACTIVE,
                 },
                 {
                     title: 'that',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: ActiveStatesEnum.ACTIVE
                 },
                 {
                     title: 'the',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: ActiveStatesEnum.ACTIVE
                 },
                 {
                     title: 'other.',
-                    state_id: StatesEnum.ACTIVE
+                    state_id: ActiveStatesEnum.ACTIVE
                 },
             ]
         });

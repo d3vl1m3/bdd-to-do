@@ -1,29 +1,22 @@
 <template>
-    <ul class="task-list">
-        <li v-for="(task, i) in sortedItems"
-            :key="i">
-            {{ task.title }}
-            <font-awesome-icon
-                    icon="times-circle"
-                    class="task-item-close"
-                    @click="removeItem(task.id)"/>
-        </li>
-    </ul>
+    <task-list :tasks="sortedItems"/>
 </template>
 
 <script>
-    import Vue from "vue"
-    import TaskTemplateService from "@/services/TaskTemplateService"
-    import Task from "@/models/Task";
-    import StatesEnum from "@/enums/StatesEnum";
+    import Vue from "vue";
+    import TaskTemplateService from "@/services/TaskTemplateService";
+    import taskList from "@/components/taskLists/taskList/component.vue"
 
     export default Vue.component('EisenhowerSortedList', {
+        components: {
+            taskList
+        },
         mixins: [
             TaskTemplateService
         ],
         computed: {
             sortedItems() {
-                const tasks = this.getAllActiveTasks;
+                const tasks = this.getAllIncompleteActiveTasks;
 
                 tasks.sort((a,b) => {
 
@@ -49,16 +42,6 @@
                 });
 
                 return tasks;
-            }
-        },
-        methods: {
-            removeItem(id) {
-                Task.update({
-                    where: id,
-                    data: {
-                        state_id: StatesEnum.DELETED
-                    }
-                });
             }
         }
     })

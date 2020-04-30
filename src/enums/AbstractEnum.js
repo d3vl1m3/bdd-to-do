@@ -4,14 +4,14 @@ export default class AbstractEnum {
         return {}
     }
 
-    // Uppercase getter name
+    // Find by prop key
     static getPropertyByKey(key) {
         return Object.prototype.hasOwnProperty.call(this, key)
             ? this.properties[key]
             : undefined;
     }
 
-    // whatever the name is in the properties object
+    // Find by prop name
     static getPropertyByName(name) {
         const key = Object.keys(this.properties).find((k) => this.properties[k].name === name);
         return Object.prototype.hasOwnProperty.call(this.properties, key)
@@ -19,7 +19,7 @@ export default class AbstractEnum {
             : undefined;
     }
 
-    // whatever the value is in the properties object
+    // Find by prop name
     static getPropertyById(id) {
         const key = Object.keys(this.properties).find((k) => this.properties[k].id === id);
         return Object.prototype.hasOwnProperty.call(this.properties, key)

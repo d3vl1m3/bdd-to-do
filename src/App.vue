@@ -18,7 +18,7 @@
                     <button class="task-sort-trigger"
                             type="button"
                             @click.prevent="sorting = true"
-                            :disabled="!getAllActiveTasks.length">
+                            :disabled="!getAllIncompleteActiveTasks.length">
                         <template v-if="sorting">
                             Redo!
                         </template>
@@ -37,6 +37,8 @@
                     getActiveTasksOnlyWithActiveCategories.length"/>
                 </template>
 
+                <task-list class="done-list" :tasks="getAllCompleteActiveTasks"/>
+
 
             </div>
         </div>
@@ -45,10 +47,10 @@
 
 <script>
     import Task from '@/models/Task'
-    import StatesEnum from "@/enums/StatesEnum";
+    import ActiveStatesEnum from "@/enums/ActiveStatesEnum";
     import TaskService from "@/services/TaskTemplateService";
-    import EisenhowerSorting from "@/components/forms/EisenhowerSorting/componet.vue";
-    import EisenhowerSortedList from "@/components/lists/EisenhowerSortedList/component.vue";
+    import EisenhowerSorting from "@/components/forms/eisenhowerSorting/componet.vue";
+    import EisenhowerSortedList from "@/components/taskLists/eisenhowerSortedList/component.vue";
 
     export default {
         data: () => ({
@@ -75,7 +77,7 @@
                         data: [
                             {
                                 title: this.task,
-                                state_id: StatesEnum.ACTIVE
+                                state_id: ActiveStatesEnum.ACTIVE
                             }
                         ]
                     }).then(() => {
