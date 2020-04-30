@@ -3,6 +3,10 @@
         <li v-for="(task, i) in sortedItems"
             :key="i">
             {{ task.title }}
+            <font-awesome-icon
+                    icon="times-circle"
+                    class="task-item-close"
+                    @click="removeItem(task.id)"/>
         </li>
     </ul>
 </template>
@@ -19,11 +23,7 @@
         ],
         computed: {
             sortedItems() {
-                const tasks = Task.query()
-                    .where('state_id', StatesEnum.ACTIVE)
-                    .has('categories', '>', 1)
-                    .withAll()
-                    .get();
+                const tasks = this.getAllActiveTasks;
 
                 tasks.sort((a,b) => {
 
@@ -49,6 +49,16 @@
                 });
 
                 return tasks;
+            }
+        },
+        methods: {
+            removeItem(id) {
+                Task.update({
+                    where: id,
+                    data: {
+                        state_id: StatesEnum.DELETED
+                    }
+                });
             }
         }
     })

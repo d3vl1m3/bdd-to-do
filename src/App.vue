@@ -33,19 +33,10 @@
                 </template>
 
                 <template v-else-if="!sorting">
-                    <ul class="task-list">
-                        <li v-for="(task, i) in getAllActiveTasks"
-                            :key="i">
-                            {{ task.title }}
-                            <font-awesome-icon
-                                    icon="times-circle"
-                                    class="task-item-close"
-                                    @click="removeItem(task.id)"/>
-                        </li>
-                    </ul>
+                    <eisenhower-sorted-list class="task-list" v-if="!sorting &&
+                    getActiveTasksOnlyWithActiveCategories.length"/>
                 </template>
 
-                <eisenhower-sorted-list class="sorted-list" v-if="!sorting && getActiveTasksOnlyWithActiveCategories.length"/>
 
             </div>
         </div>
@@ -92,14 +83,6 @@
                         this.task = '';
                     });
                 }
-            },
-            removeItem(id) {
-                Task.update({
-                    where: id,
-                    data: {
-                        state_id: StatesEnum.DELETED
-                    }
-                });
             }
         }
     }

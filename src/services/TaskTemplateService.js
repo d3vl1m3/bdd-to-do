@@ -17,7 +17,7 @@ export default Vue.mixin({
         getActiveTasksOnlyWithActiveCategories() {
             return Task.query()
                 .where('state_id', StatesEnum.ACTIVE)
-                .has('categories', '>', 1)
+                .with('categories')
                 .get();
         }
     }
