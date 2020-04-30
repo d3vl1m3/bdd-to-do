@@ -18,24 +18,35 @@
             sortedItems() {
                 const tasks = this.getAllIncompleteActiveTasks;
 
-                tasks.sort((a,b) => {
-
+                tasks.sort((a, b) => {
                     if (
-                        a.categories.length
-                        && b.categories.length
+                        typeof a.categories[0] === "undefined"
+                        || typeof a.categories[1] === "undefined"
+                        || typeof a.categories[0].order === "undefined"
+                        || typeof a.categories[1].order === "undefined"
                     ) {
-                        if ( a.categories[0].order < b.categories[0].order ) {
-                            return 1;
-                        }
-                        if ( a.categories[0].order > b.categories[0].order ) {
-                            return -1;
-                        }
-                        if ( a.categories[1].order < b.categories[1].order ) {
-                            return 1;
-                        }
-                        if ( a.categories[1].order > b.categories[1].order ) {
-                            return -1;
-                        }
+                        return 1;
+                    }
+                    if (
+                        typeof b.categories[0] === "undefined"
+                        || typeof b.categories[1] === "undefined"
+                        || typeof b.categories[0].order === "undefined"
+                        || typeof b.categories[1].order === "undefined"
+                    ) {
+                        return -1;
+                    }
+
+                    if (a.categories[0].order < b.categories[0].order) {
+                        return 1;
+                    }
+                    if (a.categories[0].order > b.categories[0].order) {
+                        return -1;
+                    }
+                    if (a.categories[1].order < b.categories[1].order) {
+                        return 1;
+                    }
+                    if (a.categories[1].order > b.categories[1].order) {
+                        return -1;
                     }
 
                     return 0;

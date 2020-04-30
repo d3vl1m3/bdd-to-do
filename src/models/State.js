@@ -1,6 +1,6 @@
-import {Model} from '@vuex-orm/core'
+import BootstrapModel from "@/models/BootstrapModel";
 
-export default class State extends Model {
+export default class State extends BootstrapModel {
     // This is the name used as module name of the Vuex Store.
     static entity = 'states';
 
@@ -8,7 +8,7 @@ export default class State extends Model {
     // for the generic field type. The argument is the default value.
     static fields() {
         return {
-            id: this.uid(),
+            ...super.fields(),
             state: this.attr('')
         }
     }

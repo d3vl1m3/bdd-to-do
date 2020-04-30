@@ -1,9 +1,9 @@
-import {Model} from '@vuex-orm/core'
 import State from "@/models/State";
 import TaskCategory from "@/models/TaskCategory";
 import DoneStatesEnum from "@/enums/DoneStatesEnum";
+import BootstrapModel from "@/models/BootstrapModel";
 
-export default class Task extends Model {
+export default class Task extends BootstrapModel {
     // This is the name used as module name of the Vuex Store.
     static entity = 'tasks';
 
@@ -11,7 +11,7 @@ export default class Task extends Model {
     // for the generic field type. The argument is the default value.
     static fields() {
         return {
-            id: this.uid(),
+            ...super.fields(),
             state_id: this.attr(null),
             title: this.attr(''),
             state: this.belongsTo(State, 'state_id'),
