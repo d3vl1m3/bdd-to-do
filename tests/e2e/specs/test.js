@@ -144,4 +144,22 @@ describe('Testing todo list', () => {
             .children('li')
             .contains(listItemTarget);
     })
+
+    it('User can delete/recover items from a "deleted tabs"', () => {
+        const listItemTarget = '0';
+
+        // the content in the original list to look for
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget)
+            .should('exist')
+            .find('.task-item-remove')
+            .click();
+
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget)
+            .should('not.exist');
+
+    })
 });
