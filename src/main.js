@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import Vuex from "vuex";
+import Vuex from 'vuex'
 import VuexORM from '@vuex-orm/core'
+import router from '@/router'
 import App from './App.vue'
 import State from '@/models/State'
 import Task from '@/models/Task'
@@ -38,5 +39,6 @@ Vue.config.productionTip = false;
 
 new Vue({
     store,
+    router,
     render: h => h(App)
 }).$mount('#app');

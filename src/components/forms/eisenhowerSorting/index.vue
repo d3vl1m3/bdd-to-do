@@ -35,7 +35,7 @@
 <script>
     import Vue from 'vue';
     import Category from "@/models/Category";
-    import RadioButtonCollection from "@/components/inputs/radioButtonCollection/component.vue";
+    import RadioButtonCollection from "@/components/inputs/radioButtonCollection/index.vue";
     import TaskService from "@/services/TaskTemplateService";
     import TaskCategory from "@/models/TaskCategory";
 
@@ -44,12 +44,6 @@
         data() {
             return {
                 categories: Category.query().where('parent_id', '$uid1').get()
-            }
-        },
-        props: {
-            sorting: {
-                type: Boolean,
-                require: true
             }
         },
         components: {
@@ -74,7 +68,7 @@
                     })
                 });
 
-                this.$emit('update:sorting', false);
+                this.$router.push({name: 'home'})
             }
         }
     })

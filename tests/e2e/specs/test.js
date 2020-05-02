@@ -1,7 +1,7 @@
 // https://docs.cypress.io/api/introduction/api.html
 function initTaskListWithItems() {
     // button should always be disabled to start
-    cy.get('@taskSortTrigger').should('be.disabled');
+    cy.get('.task-sort-trigger').should('not.exist');
 
     // type out all the tasks required
     cy.get('@newTaskInput')
@@ -20,7 +20,7 @@ function initTaskListWithItems() {
 function attemptToTriggerSortingUi() {
     // a button for 'begin!' is no longer disabled
     cy.get('@taskSortTrigger')
-        .should('not.be.disabled')
+        .should('exist')
         // now lets trigger the sorting form to appear
         .click();
 
@@ -34,9 +34,10 @@ describe('Testing todo list', () => {
         cy.visit('/');
         cy.get('.new-task-input').as('newTaskInput');
         cy.get('.new-task-submit').as('newTaskSubmit');
-        cy.get('.task-sort-trigger').as('taskSortTrigger');
         // alias for list now available
         initTaskListWithItems();
+
+        cy.get('.task-sort-trigger').as('taskSortTrigger');
 
         cy.get('.task-list').as('taskList');
     });

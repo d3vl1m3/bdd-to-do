@@ -5,7 +5,7 @@
 <script>
     import Vue from "vue";
     import TaskTemplateService from "@/services/TaskTemplateService";
-    import taskList from "@/components/taskLists/taskList/component.vue"
+    import taskList from "@/components/taskLists/taskList/index.vue"
 
     export default Vue.component('EisenhowerSortedList', {
         components: {
