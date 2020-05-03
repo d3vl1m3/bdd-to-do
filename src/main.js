@@ -9,7 +9,7 @@ import Category from '@/models/Category'
 import TaskCategory from '@/models/TaskCategory'
 import DbSeeder from '@/DbSeeder'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faTimes, faCheck, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faTimes, faCheck, faTrash, faHistory} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
 Vue.use(Vuex);
@@ -32,6 +32,7 @@ DbSeeder.init();
 library.add(faTimes);
 library.add(faCheck);
 library.add(faTrash);
+library.add(faHistory);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

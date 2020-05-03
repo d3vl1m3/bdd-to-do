@@ -1,41 +1,53 @@
 <template>
     <div>
-        <h1>What needs doing?</h1>
+        <div class="container mb-4">
+            <div class="row-cols-1">
+                <navigation-triggers/>
+            </div>
+        </div>
 
-        <form @submit.prevent="addItem">
-            <input id="new-task-input"
-                   class="new-task-input"
-                   type="text"
-                   v-model="task"
-                   aria-label="Your new task">
-            <button class="new-task-submit"
-                    type="submit">
-                Add
-            </button>
+        <div class="container mb-4">
+            <div class="row-cols-1">
+                <form @submit.prevent="addItem">
+                    <input id="new-task-input"
+                           class="new-task-input"
+                           type="text"
+                           v-model="task"
+                           aria-label="Your new task">
+                    <button class="new-task-submit"
+                            type="submit">
+                        Add
+                    </button>
+                </form>
+            </div>
+        </div>
 
-            <router-link v-if="getAllIncompleteActiveTasks.length"
-                         :to="{name: 'task_sorting'}"
-                         class="task-sort-trigger">
-                Begin!
-            </router-link>
-        </form>
-        <template>
-            <eisenhower-sorted-list class="task-list" v-if="getActiveTasksOnlyWithActiveCategories.length"/>
-        </template>
+        <div v-if="getActiveTasksOnlyWithActiveCategories.length"
+             class="container mb-4">
+            <div class="row-cols-1">
+                <eisenhower-sorted-list class="task-list"/>
+            </div>
+        </div>
 
-        <task-list class="done-list" :tasks="getAllCompleteActiveTasks"/>
+        <div class="container mb-4">
+            <div class="row-cols-1">
+                <task-list class="done-list" :tasks="getAllCompleteActiveTasks"/>
+            </div>
+        </div>
 
     </div>
 </template>
 
 <script>
 
+    import Vue from 'vue';
     import Task from '@/models/Task';
     import ActiveStatesEnum from "@/enums/ActiveStatesEnum";
     import TaskService from "@/services/TaskTemplateService";
+    import NavigationTriggers from '@/components/navigation/triggers/index.vue';
     import EisenhowerSortedList from "@/components/taskLists/eisenhowerSortedList/index.vue";
 
-    export default {
+    export default Vue.component('Home', {
         data: () => ({
             hide: false,
             task: '',
@@ -45,7 +57,8 @@
             TaskService
         ],
         components: {
-            EisenhowerSortedList
+            EisenhowerSortedList,
+            NavigationTriggers
         },
         methods: {
             addItem() {
@@ -64,5 +77,5 @@
                 }
             }
         }
-    }
+    });
 </script>

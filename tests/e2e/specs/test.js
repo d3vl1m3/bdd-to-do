@@ -19,7 +19,7 @@ function initTaskListWithItems() {
 
 function attemptToTriggerSortingUi() {
     // a button for 'begin!' is no longer disabled
-    cy.get('@taskSortTrigger')
+    cy.get('@sortingLink')
         .should('exist')
         // now lets trigger the sorting form to appear
         .click();
@@ -37,9 +37,14 @@ describe('Testing todo list', () => {
         // alias for list now available
         initTaskListWithItems();
 
-        cy.get('.task-sort-trigger').as('taskSortTrigger');
+        cy.get('.sorting-link').as('sortingLink');
 
         cy.get('.task-list').as('taskList');
+        cy.get('.deleted-link')
+            .as('deletedTasksLink');
+
+        cy.get('.home-link').as('homeLink')
+            .click();
     });
 
     it('User can add and remove items from the task list', () => {
@@ -162,5 +167,31 @@ describe('Testing todo list', () => {
             .contains(listItemTarget)
             .should('not.exist');
 
+        // click the archive link
+        cy.get('@deletedTasksLink')
+            .click();
+
+        //recover the item that was just deleted
+        cy.get('.deleted-tasks').as('deletedTasks')
+            .children('li')
+            .contains(listItemTarget)
+            .should('exist')
+            .find('.task-item-recover')
+            .click();
+
+        // item it no longer in the deleted tasks
+        cy.get('@deletedTasks')
+            .children('li')
+            .should('not.exist');
+
+        // go back to the home page
+        cy.get('@homeLink')
+            .click();
+
+        // make sure the item is back in the normal list again
+        cy.get('@taskList')
+            .children('li')
+            .contains(listItemTarget)
+            .should('exist');
     })
 });

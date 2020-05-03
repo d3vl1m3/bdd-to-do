@@ -28,6 +28,11 @@ export default Vue.mixin({
                 .where('state_id', ActiveStatesEnum.ACTIVE)
                 .with('categories')
                 .get();
+        },
+        getAllArchivedTasks() {
+            return Task.query()
+                .where('state_id', ActiveStatesEnum.DELETED)
+                .get();
         }
     }
 });
